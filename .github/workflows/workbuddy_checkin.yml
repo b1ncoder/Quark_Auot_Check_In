@@ -2,8 +2,11 @@ name: WorkBuddy Daily Check-in
 
 on:
   schedule:
-    # 09:00 Asia/Shanghai = 01:00 UTC
+    # Primary run: 09:00 Asia/Shanghai = 01:00 UTC
     - cron: '0 1 * * *'
+    # Backup run: same day 21:00 Asia/Shanghai = 13:00 UTC
+    # The API is idempotent, so this safely catches scheduler delays.
+    - cron: '0 13 * * *'
   workflow_dispatch:
 
 jobs:
