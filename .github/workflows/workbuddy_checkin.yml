@@ -1,0 +1,28 @@
+name: WorkBuddy Daily Check-in
+
+on:
+  schedule:
+    # 09:00 Asia/Shanghai = 01:00 UTC
+    - cron: '0 1 * * *'
+  workflow_dispatch:
+
+jobs:
+  checkin:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Install dependencies
+        run: python -m pip install --disable-pip-version-check requests
+
+      - name: WorkBuddy check-in
+        env:
+          WORKBUDDY_TOKEN: ${{ secrets.WORKBUDDY_TOKEN }}
+        run: python workbuddy_checkin.py
